@@ -1,6 +1,6 @@
 var request = require('request');
 var fs = require('fs');
-
+// var args = process.argv;
 
 var GITHUB_USER = 'violetreader';
 var GITHUB_TOKEN = 'cf46a8eff5c7535abed2cc1ad13eb39073c4a5b9';
@@ -52,7 +52,6 @@ function getRepoContributors(repoOwner, repoName, cb) {
         //   cb(null, 'All images downloaded');
         // }
       })
-  //we must create a anonymas function that will create a new file for each image?
       .pipe(fs.createWriteStream('./avatars/' + login + '.jpg'));
     }
   })
@@ -60,10 +59,16 @@ function getRepoContributors(repoOwner, repoName, cb) {
 
 //function (err, result) is the callback function?
 //or this param just needs to be a function, it can be any function?
-getRepoContributors("jquery", "jquery", function(error, result) {
+getRepoContributors(process.argv[2], process.argv[3], function(error, result) {
   console.log("Errors:", error);
   console.log("Result:", result);
 });
+
+// "jquery", "jquery",
+
+
+
+
 
 
 
