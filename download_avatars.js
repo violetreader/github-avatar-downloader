@@ -1,12 +1,9 @@
 var request = require('request');
 var fs = require('fs');
 var args = process.argv;
-
 var GITHUB_USER = 'violetreader';
 var GITHUB_TOKEN = 'cf46a8eff5c7535abed2cc1ad13eb39073c4a5b9';
 
-//cb is your ASYNCH callback function to handle results of your images in
-//each new file?
 function getRepoContributors(repoOwner, repoName, cb) {
   var requestURL = 'https://'+ GITHUB_USER + ':' + GITHUB_TOKEN + '@api.github.com/repos/' + repoOwner + '/' + repoName + '/contributors';
   // console.log(requestURL);
@@ -19,7 +16,7 @@ function getRepoContributors(repoOwner, repoName, cb) {
     if (response && response.statusCode !== 200) {
       console.log('Please enter in 2 valid arguments in command line');
       // console.log('Response was not 200!', response);
-      // return false;
+      return false;
     }
     // console.log('this is body', body);
     let data = JSON.parse(body);
