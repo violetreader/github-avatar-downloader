@@ -1,6 +1,6 @@
 var request = require('request');
 var fs = require('fs');
-// var args = process.argv;
+var args = process.argv;
 
 var GITHUB_USER = 'violetreader';
 var GITHUB_TOKEN = 'cf46a8eff5c7535abed2cc1ad13eb39073c4a5b9';
@@ -9,7 +9,7 @@ var GITHUB_TOKEN = 'cf46a8eff5c7535abed2cc1ad13eb39073c4a5b9';
 //each new file?
 function getRepoContributors(repoOwner, repoName, cb) {
   var requestURL = 'https://'+ GITHUB_USER + ':' + GITHUB_TOKEN + '@api.github.com/repos/' + repoOwner + '/' + repoName + '/contributors';
-  console.log(requestURL);
+  // console.log(requestURL);
   //typed in curl -I requestURL and couldnt find my added user-agent key-value pair there??
   request({url: requestURL, headers: {'User-Agent': 'request'}}, (error, response, body) => {
     if (error) {
@@ -17,8 +17,9 @@ function getRepoContributors(repoOwner, repoName, cb) {
       return false;
     }
     if (response && response.statusCode !== 200) {
-      console.log('Response was not 200!', response);
-      return false;
+      console.log('Please enter in 2 valid arguments in command line');
+      // console.log('Response was not 200!', response);
+      // return false;
     }
     // console.log('this is body', body);
     let data = JSON.parse(body);
@@ -31,7 +32,7 @@ function getRepoContributors(repoOwner, repoName, cb) {
       data.forEach(aCallback);
     }
     function aCallback(contributor) {
-      console.log(contributor);
+      // console.log(contributor);
       var avatURL = contributor.avatar_url;
       var login = contributor.login;
         //.on is throwing errors
@@ -41,13 +42,20 @@ function getRepoContributors(repoOwner, repoName, cb) {
       })
       .on('response', function(response){
       // console.log('Downloading image...');
-      console.log('Response Status Message: ', response.statusMessage);
-      console.log('Response Headers: ', response.headers['content-type'])
+        // console.log(args.length);
+        if (!(args.length === 4)) {
+          console.log('Please enter in only 2 arguments into command line');
+          return;
+        } else {
+          console.log('Response Status Message: ', response.statusMessage);
+          console.log('Response Headers: ', response.headers['content-type']);
       // console.log('Download Complete.');
+        }
       })
+
       .on('end', function(end) {
         totalRequests -= 1;
-        console.log('finished downloading ' + totalRequests)
+        // console.log('finished downloading ' + totalRequests)
         // if(totalRequests === 0) {
         //   cb(null, 'All images downloaded');
         // }
@@ -59,7 +67,7 @@ function getRepoContributors(repoOwner, repoName, cb) {
 
 //function (err, result) is the callback function?
 //or this param just needs to be a function, it can be any function?
-getRepoContributors(process.argv[2], process.argv[3], function(error, result) {
+getRepoContributors(args[2], args[3], function(error, result) {
   console.log("Errors:", error);
   console.log("Result:", result);
 });
